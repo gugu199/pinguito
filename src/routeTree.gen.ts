@@ -9,13 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MateriasRouteImport } from './routes/materias'
 import { Route as InstitucionalRouteImport } from './routes/institucional'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CalendarioRouteImport } from './routes/calendario'
+import { Route as BuscarRouteImport } from './routes/buscar'
 import { Route as AvisosRouteImport } from './routes/avisos'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MateriasIndexRouteImport } from './routes/materias.index'
+import { Route as MateriasEspecialidadRouteImport } from './routes/materias.$especialidad'
+import { Route as MateriasEspecialidadMateriaIdRouteImport } from './routes/materias.$especialidad.$materiaId'
 
+const MateriasRoute = MateriasRouteImport.update({
+  id: '/materias',
+  path: '/materias',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InstitucionalRoute = InstitucionalRouteImport.update({
   id: '/institucional',
   path: '/institucional',
@@ -36,6 +46,11 @@ const CalendarioRoute = CalendarioRouteImport.update({
   path: '/calendario',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BuscarRoute = BuscarRouteImport.update({
+  id: '/buscar',
+  path: '/buscar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AvisosRoute = AvisosRouteImport.update({
   id: '/avisos',
   path: '/avisos',
@@ -46,70 +61,123 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MateriasIndexRoute = MateriasIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MateriasRoute,
+} as any)
+const MateriasEspecialidadRoute = MateriasEspecialidadRouteImport.update({
+  id: '/$especialidad',
+  path: '/$especialidad',
+  getParentRoute: () => MateriasRoute,
+} as any)
+const MateriasEspecialidadMateriaIdRoute =
+  MateriasEspecialidadMateriaIdRouteImport.update({
+    id: '/$materiaId',
+    path: '/$materiaId',
+    getParentRoute: () => MateriasEspecialidadRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/avisos': typeof AvisosRoute
+  '/buscar': typeof BuscarRoute
   '/calendario': typeof CalendarioRoute
   '/contacto': typeof ContactoRoute
   '/galeria': typeof GaleriaRoute
   '/institucional': typeof InstitucionalRoute
+  '/materias': typeof MateriasRouteWithChildren
+  '/materias/$especialidad': typeof MateriasEspecialidadRouteWithChildren
+  '/materias/': typeof MateriasIndexRoute
+  '/materias/$especialidad/$materiaId': typeof MateriasEspecialidadMateriaIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/avisos': typeof AvisosRoute
+  '/buscar': typeof BuscarRoute
   '/calendario': typeof CalendarioRoute
   '/contacto': typeof ContactoRoute
   '/galeria': typeof GaleriaRoute
   '/institucional': typeof InstitucionalRoute
+  '/materias/$especialidad': typeof MateriasEspecialidadRouteWithChildren
+  '/materias': typeof MateriasIndexRoute
+  '/materias/$especialidad/$materiaId': typeof MateriasEspecialidadMateriaIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/avisos': typeof AvisosRoute
+  '/buscar': typeof BuscarRoute
   '/calendario': typeof CalendarioRoute
   '/contacto': typeof ContactoRoute
   '/galeria': typeof GaleriaRoute
   '/institucional': typeof InstitucionalRoute
+  '/materias': typeof MateriasRouteWithChildren
+  '/materias/$especialidad': typeof MateriasEspecialidadRouteWithChildren
+  '/materias/': typeof MateriasIndexRoute
+  '/materias/$especialidad/$materiaId': typeof MateriasEspecialidadMateriaIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/avisos'
+    | '/buscar'
     | '/calendario'
     | '/contacto'
     | '/galeria'
     | '/institucional'
+    | '/materias'
+    | '/materias/$especialidad'
+    | '/materias/'
+    | '/materias/$especialidad/$materiaId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/avisos'
+    | '/buscar'
     | '/calendario'
     | '/contacto'
     | '/galeria'
     | '/institucional'
+    | '/materias/$especialidad'
+    | '/materias'
+    | '/materias/$especialidad/$materiaId'
   id:
     | '__root__'
     | '/'
     | '/avisos'
+    | '/buscar'
     | '/calendario'
     | '/contacto'
     | '/galeria'
     | '/institucional'
+    | '/materias'
+    | '/materias/$especialidad'
+    | '/materias/'
+    | '/materias/$especialidad/$materiaId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AvisosRoute: typeof AvisosRoute
+  BuscarRoute: typeof BuscarRoute
   CalendarioRoute: typeof CalendarioRoute
   ContactoRoute: typeof ContactoRoute
   GaleriaRoute: typeof GaleriaRoute
   InstitucionalRoute: typeof InstitucionalRoute
+  MateriasRoute: typeof MateriasRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/materias': {
+      id: '/materias'
+      path: '/materias'
+      fullPath: '/materias'
+      preLoaderRoute: typeof MateriasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/institucional': {
       id: '/institucional'
       path: '/institucional'
@@ -138,6 +206,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalendarioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/buscar': {
+      id: '/buscar'
+      path: '/buscar'
+      fullPath: '/buscar'
+      preLoaderRoute: typeof BuscarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/avisos': {
       id: '/avisos'
       path: '/avisos'
@@ -152,16 +227,64 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/materias/': {
+      id: '/materias/'
+      path: '/'
+      fullPath: '/materias/'
+      preLoaderRoute: typeof MateriasIndexRouteImport
+      parentRoute: typeof MateriasRoute
+    }
+    '/materias/$especialidad': {
+      id: '/materias/$especialidad'
+      path: '/$especialidad'
+      fullPath: '/materias/$especialidad'
+      preLoaderRoute: typeof MateriasEspecialidadRouteImport
+      parentRoute: typeof MateriasRoute
+    }
+    '/materias/$especialidad/$materiaId': {
+      id: '/materias/$especialidad/$materiaId'
+      path: '/$materiaId'
+      fullPath: '/materias/$especialidad/$materiaId'
+      preLoaderRoute: typeof MateriasEspecialidadMateriaIdRouteImport
+      parentRoute: typeof MateriasEspecialidadRoute
+    }
   }
 }
+
+interface MateriasEspecialidadRouteChildren {
+  MateriasEspecialidadMateriaIdRoute: typeof MateriasEspecialidadMateriaIdRoute
+}
+
+const MateriasEspecialidadRouteChildren: MateriasEspecialidadRouteChildren = {
+  MateriasEspecialidadMateriaIdRoute: MateriasEspecialidadMateriaIdRoute,
+}
+
+const MateriasEspecialidadRouteWithChildren =
+  MateriasEspecialidadRoute._addFileChildren(MateriasEspecialidadRouteChildren)
+
+interface MateriasRouteChildren {
+  MateriasEspecialidadRoute: typeof MateriasEspecialidadRouteWithChildren
+  MateriasIndexRoute: typeof MateriasIndexRoute
+}
+
+const MateriasRouteChildren: MateriasRouteChildren = {
+  MateriasEspecialidadRoute: MateriasEspecialidadRouteWithChildren,
+  MateriasIndexRoute: MateriasIndexRoute,
+}
+
+const MateriasRouteWithChildren = MateriasRoute._addFileChildren(
+  MateriasRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AvisosRoute: AvisosRoute,
+  BuscarRoute: BuscarRoute,
   CalendarioRoute: CalendarioRoute,
   ContactoRoute: ContactoRoute,
   GaleriaRoute: GaleriaRoute,
   InstitucionalRoute: InstitucionalRoute,
+  MateriasRoute: MateriasRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
