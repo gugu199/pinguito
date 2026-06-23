@@ -15,7 +15,7 @@ function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const items = [
+  const items: Array<{ to: string; label: string; icon: typeof LayoutDashboard; show: boolean; exact?: boolean }> = [
     { to: "/admin", label: "Resumen", icon: LayoutDashboard, show: true, exact: true },
     { to: "/admin/avisos", label: "Avisos", icon: Megaphone, show: true },
     { to: "/admin/calendario", label: "Calendario", icon: Calendar, show: canEditCalendario(roles) },
@@ -24,7 +24,7 @@ function AdminLayout() {
     { to: "/admin/mensajes", label: "Mensajes", icon: Mail, show: canManageUsers(roles) },
     { to: "/admin/invitaciones", label: "Invitaciones", icon: KeyRound, show: canManageUsers(roles) },
     { to: "/admin/config", label: "Datos institucionales", icon: Settings, show: roles.includes("autoridad") || roles.includes("informatica") },
-  ] as const;
+  ];
 
   async function logout() {
     await supabase.auth.signOut();

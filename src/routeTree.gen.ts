@@ -16,9 +16,13 @@ import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CalendarioRouteImport } from './routes/calendario'
 import { Route as BuscarRouteImport } from './routes/buscar'
 import { Route as AvisosRouteImport } from './routes/avisos'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MateriasIndexRouteImport } from './routes/materias.index'
 import { Route as MateriasEspecialidadRouteImport } from './routes/materias.$especialidad'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as MateriasEspecialidadMateriaIdRouteImport } from './routes/materias.$especialidad.$materiaId'
 
 const MateriasRoute = MateriasRouteImport.update({
@@ -56,6 +60,15 @@ const AvisosRoute = AvisosRouteImport.update({
   path: '/avisos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -71,6 +84,16 @@ const MateriasEspecialidadRoute = MateriasEspecialidadRouteImport.update({
   path: '/$especialidad',
   getParentRoute: () => MateriasRoute,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const MateriasEspecialidadMateriaIdRoute =
   MateriasEspecialidadMateriaIdRouteImport.update({
     id: '/$materiaId',
@@ -80,6 +103,7 @@ const MateriasEspecialidadMateriaIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/avisos': typeof AvisosRoute
   '/buscar': typeof BuscarRoute
   '/calendario': typeof CalendarioRoute
@@ -87,12 +111,15 @@ export interface FileRoutesByFullPath {
   '/galeria': typeof GaleriaRoute
   '/institucional': typeof InstitucionalRoute
   '/materias': typeof MateriasRouteWithChildren
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/materias/$especialidad': typeof MateriasEspecialidadRouteWithChildren
   '/materias/': typeof MateriasIndexRoute
   '/materias/$especialidad/$materiaId': typeof MateriasEspecialidadMateriaIdRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/avisos': typeof AvisosRoute
   '/buscar': typeof BuscarRoute
   '/calendario': typeof CalendarioRoute
@@ -102,10 +129,13 @@ export interface FileRoutesByTo {
   '/materias/$especialidad': typeof MateriasEspecialidadRouteWithChildren
   '/materias': typeof MateriasIndexRoute
   '/materias/$especialidad/$materiaId': typeof MateriasEspecialidadMateriaIdRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/avisos': typeof AvisosRoute
   '/buscar': typeof BuscarRoute
   '/calendario': typeof CalendarioRoute
@@ -113,14 +143,17 @@ export interface FileRoutesById {
   '/galeria': typeof GaleriaRoute
   '/institucional': typeof InstitucionalRoute
   '/materias': typeof MateriasRouteWithChildren
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/materias/$especialidad': typeof MateriasEspecialidadRouteWithChildren
   '/materias/': typeof MateriasIndexRoute
   '/materias/$especialidad/$materiaId': typeof MateriasEspecialidadMateriaIdRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/avisos'
     | '/buscar'
     | '/calendario'
@@ -128,12 +161,15 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/institucional'
     | '/materias'
+    | '/admin'
     | '/materias/$especialidad'
     | '/materias/'
     | '/materias/$especialidad/$materiaId'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/avisos'
     | '/buscar'
     | '/calendario'
@@ -143,9 +179,12 @@ export interface FileRouteTypes {
     | '/materias/$especialidad'
     | '/materias'
     | '/materias/$especialidad/$materiaId'
+    | '/admin'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
+    | '/auth'
     | '/avisos'
     | '/buscar'
     | '/calendario'
@@ -153,13 +192,17 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/institucional'
     | '/materias'
+    | '/_authenticated/admin'
     | '/materias/$especialidad'
     | '/materias/'
     | '/materias/$especialidad/$materiaId'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   AvisosRoute: typeof AvisosRoute
   BuscarRoute: typeof BuscarRoute
   CalendarioRoute: typeof CalendarioRoute
@@ -220,6 +263,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AvisosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -241,6 +298,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MateriasEspecialidadRouteImport
       parentRoute: typeof MateriasRoute
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/materias/$especialidad/$materiaId': {
       id: '/materias/$especialidad/$materiaId'
       path: '/$materiaId'
@@ -250,6 +321,28 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface MateriasEspecialidadRouteChildren {
   MateriasEspecialidadMateriaIdRoute: typeof MateriasEspecialidadMateriaIdRoute
@@ -278,6 +371,8 @@ const MateriasRouteWithChildren = MateriasRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   AvisosRoute: AvisosRoute,
   BuscarRoute: BuscarRoute,
   CalendarioRoute: CalendarioRoute,
