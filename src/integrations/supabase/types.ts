@@ -14,16 +14,412 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      avisos: {
+        Row: {
+          autor_id: string | null
+          categoria: Database["public"]["Enums"]["aviso_categoria"]
+          contenido: string
+          created_at: string
+          destacado: boolean
+          id: string
+          publicado_en: string
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          autor_id?: string | null
+          categoria: Database["public"]["Enums"]["aviso_categoria"]
+          contenido: string
+          created_at?: string
+          destacado?: boolean
+          id?: string
+          publicado_en?: string
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          autor_id?: string | null
+          categoria?: Database["public"]["Enums"]["aviso_categoria"]
+          contenido?: string
+          created_at?: string
+          destacado?: boolean
+          id?: string
+          publicado_en?: string
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      config_sitio: {
+        Row: {
+          clave: string
+          updated_at: string
+          valor: string | null
+        }
+        Insert: {
+          clave: string
+          updated_at?: string
+          valor?: string | null
+        }
+        Update: {
+          clave?: string
+          updated_at?: string
+          valor?: string | null
+        }
+        Relationships: []
+      }
+      especialidades: {
+        Row: {
+          codigo: Database["public"]["Enums"]["especialidad_codigo"]
+          descripcion: string | null
+          nombre: string
+          orden: number
+        }
+        Insert: {
+          codigo: Database["public"]["Enums"]["especialidad_codigo"]
+          descripcion?: string | null
+          nombre: string
+          orden?: number
+        }
+        Update: {
+          codigo?: Database["public"]["Enums"]["especialidad_codigo"]
+          descripcion?: string | null
+          nombre?: string
+          orden?: number
+        }
+        Relationships: []
+      }
+      eventos_calendario: {
+        Row: {
+          autor_id: string | null
+          created_at: string
+          descripcion: string | null
+          fecha_fin: string | null
+          fecha_inicio: string
+          id: string
+          tipo: Database["public"]["Enums"]["evento_tipo"]
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          autor_id?: string | null
+          created_at?: string
+          descripcion?: string | null
+          fecha_fin?: string | null
+          fecha_inicio: string
+          id?: string
+          tipo: Database["public"]["Enums"]["evento_tipo"]
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          autor_id?: string | null
+          created_at?: string
+          descripcion?: string | null
+          fecha_fin?: string | null
+          fecha_inicio?: string
+          id?: string
+          tipo?: Database["public"]["Enums"]["evento_tipo"]
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      galeria_albumes: {
+        Row: {
+          cover_path: string | null
+          created_at: string
+          descripcion: string | null
+          fecha: string | null
+          id: string
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          cover_path?: string | null
+          created_at?: string
+          descripcion?: string | null
+          fecha?: string | null
+          id?: string
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          cover_path?: string | null
+          created_at?: string
+          descripcion?: string | null
+          fecha?: string | null
+          id?: string
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      galeria_fotos: {
+        Row: {
+          album_id: string
+          alt: string
+          created_at: string
+          id: string
+          orden: number
+          storage_path: string
+        }
+        Insert: {
+          album_id: string
+          alt: string
+          created_at?: string
+          id?: string
+          orden?: number
+          storage_path: string
+        }
+        Update: {
+          album_id?: string
+          alt?: string
+          created_at?: string
+          id?: string
+          orden?: number
+          storage_path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "galeria_fotos_album_id_fkey"
+            columns: ["album_id"]
+            isOneToOne: false
+            referencedRelation: "galeria_albumes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invitations: {
+        Row: {
+          codigo: string
+          created_at: string
+          created_by: string | null
+          expira_en: string | null
+          id: string
+          nota: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          usado_en: string | null
+          usado_por: string | null
+        }
+        Insert: {
+          codigo: string
+          created_at?: string
+          created_by?: string | null
+          expira_en?: string | null
+          id?: string
+          nota?: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          usado_en?: string | null
+          usado_por?: string | null
+        }
+        Update: {
+          codigo?: string
+          created_at?: string
+          created_by?: string | null
+          expira_en?: string | null
+          id?: string
+          nota?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          usado_en?: string | null
+          usado_por?: string | null
+        }
+        Relationships: []
+      }
+      materias: {
+        Row: {
+          anio: number
+          created_at: string
+          descripcion: string | null
+          especialidad: Database["public"]["Enums"]["especialidad_codigo"]
+          id: string
+          nombre: string
+          orden: number
+          updated_at: string
+        }
+        Insert: {
+          anio: number
+          created_at?: string
+          descripcion?: string | null
+          especialidad: Database["public"]["Enums"]["especialidad_codigo"]
+          id?: string
+          nombre: string
+          orden?: number
+          updated_at?: string
+        }
+        Update: {
+          anio?: number
+          created_at?: string
+          descripcion?: string | null
+          especialidad?: Database["public"]["Enums"]["especialidad_codigo"]
+          id?: string
+          nombre?: string
+          orden?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "materias_especialidad_fkey"
+            columns: ["especialidad"]
+            isOneToOne: false
+            referencedRelation: "especialidades"
+            referencedColumns: ["codigo"]
+          },
+        ]
+      }
+      mensajes_contacto: {
+        Row: {
+          asunto: string
+          created_at: string
+          email: string
+          id: string
+          leido: boolean
+          mensaje: string
+          nombre: string
+        }
+        Insert: {
+          asunto: string
+          created_at?: string
+          email: string
+          id?: string
+          leido?: boolean
+          mensaje: string
+          nombre: string
+        }
+        Update: {
+          asunto?: string
+          created_at?: string
+          email?: string
+          id?: string
+          leido?: boolean
+          mensaje?: string
+          nombre?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          nombre_completo: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id: string
+          nombre_completo: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          nombre_completo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      recursos: {
+        Row: {
+          archivo_path: string | null
+          autor_id: string | null
+          created_at: string
+          descripcion: string | null
+          etiquetas: string[]
+          id: string
+          materia_id: string
+          tipo: Database["public"]["Enums"]["recurso_tipo"]
+          titulo: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          archivo_path?: string | null
+          autor_id?: string | null
+          created_at?: string
+          descripcion?: string | null
+          etiquetas?: string[]
+          id?: string
+          materia_id: string
+          tipo: Database["public"]["Enums"]["recurso_tipo"]
+          titulo: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          archivo_path?: string | null
+          autor_id?: string | null
+          created_at?: string
+          descripcion?: string | null
+          etiquetas?: string[]
+          id?: string
+          materia_id?: string
+          tipo?: Database["public"]["Enums"]["recurso_tipo"]
+          titulo?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recursos_materia_id_fkey"
+            columns: ["materia_id"]
+            isOneToOne: false
+            referencedRelation: "materias"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      canjear_invitacion: {
+        Args: { _codigo: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_any_role: { Args: { _user_id: string }; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "autoridad" | "docente" | "centro_estudiantes" | "informatica"
+      aviso_categoria: "institucional" | "centro_estudiantes" | "familias"
+      especialidad_codigo:
+        | "ciclo_basico"
+        | "informatica"
+        | "alimentos"
+        | "electronica"
+      evento_tipo: "examen" | "actividad" | "evento"
+      recurso_tipo: "apunte" | "guia" | "video" | "bibliografia"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +546,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["autoridad", "docente", "centro_estudiantes", "informatica"],
+      aviso_categoria: ["institucional", "centro_estudiantes", "familias"],
+      especialidad_codigo: [
+        "ciclo_basico",
+        "informatica",
+        "alimentos",
+        "electronica",
+      ],
+      evento_tipo: ["examen", "actividad", "evento"],
+      recurso_tipo: ["apunte", "guia", "video", "bibliografia"],
+    },
   },
 } as const
