@@ -28,7 +28,7 @@ const registroSchema = z.object({
   nombre: z.string().trim().min(2, "Ingresá tu nombre completo").max(120),
   email: z.string().email("Email inválido"),
   password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
-  codigo: z.string().trim().min(4, "El código de invitación es obligatorio"),
+  codigo: z.string().trim().max(64).optional().default(""),
 });
 
 function AuthPage() {
