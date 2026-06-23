@@ -84,6 +84,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Sitio institucional con avisos, calendario, materias y recursos." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Escuela Secundaria Técnica" },
+      { name: "twitter:description", content: "Sitio institucional con avisos, calendario, materias y recursos." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/979dfde4-4249-4b17-8eeb-cbcb079e6b95/id-preview-9a9f80e8--7f2a2fa1-fdd6-42b6-8887-40a4a7f368ad.lovable.app-1782242329194.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/979dfde4-4249-4b17-8eeb-cbcb079e6b95/id-preview-9a9f80e8--7f2a2fa1-fdd6-42b6-8887-40a4a7f368ad.lovable.app-1782242329194.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
