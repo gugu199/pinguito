@@ -85,15 +85,17 @@ function AuthPage() {
         return;
       }
     }
-    // Canjear código
-    const { error: rpcErr } = await supabase.rpc("canjear_invitacion", { _codigo: parsed.data.codigo });
-    setLoading(false);
-    if (rpcErr) {
-      toast.error("Cuenta creada pero el código no es válido. Pedí uno nuevo a la dirección.");
-      navigate({ to: "/admin" });
-      return;
+    if (parsed.data.codigo) {
+      const { error: rpcErr } = await supabase.rpc("canjear_invitacion", { _codigo: parsed.data.codigo });
+      if (rpcErr) {
+        setLoading(false);
+        toast.error("Cuenta creada pero el código de invitación no es válido.");
+        navigate({ to: "/admin" });
+        return;
+      }
     }
-    toast.success("Cuenta creada y rol asignado");
+    setLoading(false);
+    toast.success("Cuenta creada");
     navigate({ to: "/admin" });
   }
 
