@@ -130,7 +130,7 @@ function AuthPage() {
           <TabsContent value="registro">
             <form onSubmit={onRegistro} className="mt-4 space-y-4 rounded-md border border-border bg-card p-6">
               <p className="text-xs text-muted-foreground">
-                Necesitás un código de invitación entregado por la dirección de la escuela.
+                Si te dieron un código de invitación, ingresalo abajo para recibir tu rol. Si sos la primera autoridad que se registra, podés dejarlo vacío: el sistema te asigna el rol de Autoridad automáticamente.
               </p>
               <div className="space-y-1.5">
                 <Label htmlFor="reg-nombre">Nombre completo</Label>
@@ -145,8 +145,8 @@ function AuthPage() {
                 <Input id="reg-password" name="password" type="password" required minLength={8} autoComplete="new-password" />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="reg-codigo">Código de invitación</Label>
-                <Input id="reg-codigo" name="codigo" required />
+                <Label htmlFor="reg-codigo">Código de invitación (opcional)</Label>
+                <Input id="reg-codigo" name="codigo" />
               </div>
               <Button type="submit" disabled={loading} className="w-full">{loading ? "Creando…" : "Crear cuenta"}</Button>
             </form>
