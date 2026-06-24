@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout, PageHeader, Container } from "@/components/site/SiteLayout";
+import { VideoEmbed } from "@/components/site/VideoEmbed";
 
 const especialidadQO = (codigo: string) =>
   queryOptions({
@@ -9,7 +10,7 @@ const especialidadQO = (codigo: string) =>
     queryFn: async () => {
       const { data: esp } = await supabase
         .from("especialidades")
-        .select("codigo, nombre, descripcion")
+        .select("codigo, nombre, descripcion, video_url, salida_laboral")
         .eq("codigo", codigo as any)
         .maybeSingle();
       if (!esp) return null;
@@ -20,7 +21,14 @@ const especialidadQO = (codigo: string) =>
         .order("anio")
         .order("orden");
       if (error) throw error;
-      return { especialidad: esp, materias: materias ?? [] };
+      const { data: proyectos } = await supabase
+        .from("proyectos")
+        .select("id, titulo, descripcion, autores, anio, foto_url, destacado")
+        .eq("especialidad", codigo)
+        .order("destacado", { ascending: false })
+        .order("orden", { ascending: true })
+        .limit(12);
+      return { especialidad: esp, materias: materias ?? [], proyectos: proyectos ?? [] };
     },
   });
 
