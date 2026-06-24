@@ -40,9 +40,10 @@ const proximasCapacitacionesQO = queryOptions({
   queryFn: async () => {
     const { data, error } = await supabase
       .from("capacitaciones")
-      .select("id, nombre, descripcion, aula, dias_horarios, responsable, estado")
+      .select("id, nombre, descripcion, aula, dias, horario, responsable, estado, destacado")
       .in("estado", ["abierta", "en_curso"])
-      .order("creado_en", { ascending: false })
+      .order("destacado", { ascending: false })
+      .order("orden", { ascending: true })
       .limit(3);
     if (error) throw error;
     return data ?? [];
