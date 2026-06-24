@@ -13,6 +13,8 @@ import { Route as MateriasRouteImport } from './routes/materias'
 import { Route as InstitucionalRouteImport } from './routes/institucional'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as CentroEstudiantesRouteImport } from './routes/centro-estudiantes'
+import { Route as CapacitacionesRouteImport } from './routes/capacitaciones'
 import { Route as CalendarioRouteImport } from './routes/calendario'
 import { Route as BuscarRouteImport } from './routes/buscar'
 import { Route as AvisosRouteImport } from './routes/avisos'
@@ -51,6 +53,16 @@ const GaleriaRoute = GaleriaRouteImport.update({
 const ContactoRoute = ContactoRouteImport.update({
   id: '/contacto',
   path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CentroEstudiantesRoute = CentroEstudiantesRouteImport.update({
+  id: '/centro-estudiantes',
+  path: '/centro-estudiantes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CapacitacionesRoute = CapacitacionesRouteImport.update({
+  id: '/capacitaciones',
+  path: '/capacitaciones',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CalendarioRoute = CalendarioRouteImport.update({
@@ -163,6 +175,8 @@ export interface FileRoutesByFullPath {
   '/avisos': typeof AvisosRoute
   '/buscar': typeof BuscarRoute
   '/calendario': typeof CalendarioRoute
+  '/capacitaciones': typeof CapacitacionesRoute
+  '/centro-estudiantes': typeof CentroEstudiantesRoute
   '/contacto': typeof ContactoRoute
   '/galeria': typeof GaleriaRoute
   '/institucional': typeof InstitucionalRoute
@@ -187,6 +201,8 @@ export interface FileRoutesByTo {
   '/avisos': typeof AvisosRoute
   '/buscar': typeof BuscarRoute
   '/calendario': typeof CalendarioRoute
+  '/capacitaciones': typeof CapacitacionesRoute
+  '/centro-estudiantes': typeof CentroEstudiantesRoute
   '/contacto': typeof ContactoRoute
   '/galeria': typeof GaleriaRoute
   '/institucional': typeof InstitucionalRoute
@@ -211,6 +227,8 @@ export interface FileRoutesById {
   '/avisos': typeof AvisosRoute
   '/buscar': typeof BuscarRoute
   '/calendario': typeof CalendarioRoute
+  '/capacitaciones': typeof CapacitacionesRoute
+  '/centro-estudiantes': typeof CentroEstudiantesRoute
   '/contacto': typeof ContactoRoute
   '/galeria': typeof GaleriaRoute
   '/institucional': typeof InstitucionalRoute
@@ -237,6 +255,8 @@ export interface FileRouteTypes {
     | '/avisos'
     | '/buscar'
     | '/calendario'
+    | '/capacitaciones'
+    | '/centro-estudiantes'
     | '/contacto'
     | '/galeria'
     | '/institucional'
@@ -261,6 +281,8 @@ export interface FileRouteTypes {
     | '/avisos'
     | '/buscar'
     | '/calendario'
+    | '/capacitaciones'
+    | '/centro-estudiantes'
     | '/contacto'
     | '/galeria'
     | '/institucional'
@@ -284,6 +306,8 @@ export interface FileRouteTypes {
     | '/avisos'
     | '/buscar'
     | '/calendario'
+    | '/capacitaciones'
+    | '/centro-estudiantes'
     | '/contacto'
     | '/galeria'
     | '/institucional'
@@ -310,6 +334,8 @@ export interface RootRouteChildren {
   AvisosRoute: typeof AvisosRoute
   BuscarRoute: typeof BuscarRoute
   CalendarioRoute: typeof CalendarioRoute
+  CapacitacionesRoute: typeof CapacitacionesRoute
+  CentroEstudiantesRoute: typeof CentroEstudiantesRoute
   ContactoRoute: typeof ContactoRoute
   GaleriaRoute: typeof GaleriaRoute
   InstitucionalRoute: typeof InstitucionalRoute
@@ -344,6 +370,20 @@ declare module '@tanstack/react-router' {
       path: '/contacto'
       fullPath: '/contacto'
       preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/centro-estudiantes': {
+      id: '/centro-estudiantes'
+      path: '/centro-estudiantes'
+      fullPath: '/centro-estudiantes'
+      preLoaderRoute: typeof CentroEstudiantesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/capacitaciones': {
+      id: '/capacitaciones'
+      path: '/capacitaciones'
+      fullPath: '/capacitaciones'
+      preLoaderRoute: typeof CapacitacionesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calendario': {
@@ -565,6 +605,8 @@ const rootRouteChildren: RootRouteChildren = {
   AvisosRoute: AvisosRoute,
   BuscarRoute: BuscarRoute,
   CalendarioRoute: CalendarioRoute,
+  CapacitacionesRoute: CapacitacionesRoute,
+  CentroEstudiantesRoute: CentroEstudiantesRoute,
   ContactoRoute: ContactoRoute,
   GaleriaRoute: GaleriaRoute,
   InstitucionalRoute: InstitucionalRoute,
