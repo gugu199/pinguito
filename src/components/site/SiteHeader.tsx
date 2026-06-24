@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useConfigSitio } from "@/hooks/use-config-sitio";
 import { useAuth } from "@/hooks/use-auth";
+import { ThemeToggle } from "@/components/site/ThemeToggle";
 
 const NAV = [
   { to: "/", label: "Inicio" },
@@ -11,6 +12,8 @@ const NAV = [
   { to: "/avisos", label: "Avisos" },
   { to: "/calendario", label: "Calendario" },
   { to: "/materias", label: "Materias" },
+  { to: "/capacitaciones", label: "Capacitaciones" },
+  { to: "/centro-estudiantes", label: "Centro de Estudiantes" },
   { to: "/galeria", label: "Galería" },
   { to: "/contacto", label: "Contacto" },
 ] as const;
@@ -54,6 +57,7 @@ export function SiteHeader() {
           >
             <Search className="h-4 w-4" aria-hidden /> Buscar…
           </Link>
+          <ThemeToggle />
           {user ? (
             <Button asChild size="sm">
               <Link to="/admin">Panel</Link>

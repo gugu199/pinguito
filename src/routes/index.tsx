@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
-import { Calendar, Megaphone, BookOpen, Mail, Camera, Newspaper } from "lucide-react";
+import { Calendar, Megaphone, BookOpen, Mail, Camera, Newspaper, GraduationCap, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout, Container } from "@/components/site/SiteLayout";
 import { AvisoCard } from "@/components/site/AvisoCard";
+import { VideoEmbed } from "@/components/site/VideoEmbed";
 import { useConfigSitio } from "@/hooks/use-config-sitio";
 
 const avisosRecientesQO = queryOptions({
@@ -34,6 +35,20 @@ const proximosEventosQO = queryOptions({
   },
 });
 
+const proximasCapacitacionesQO = queryOptions({
+  queryKey: ["capacitaciones", "proximas"],
+  queryFn: async () => {
+    const { data, error } = await supabase
+      .from("capacitaciones")
+      .select("id, nombre, descripcion, aula, dias_horarios, responsable, estado")
+      .in("estado", ["abierta", "en_curso"])
+      .order("creado_en", { ascending: false })
+      .limit(3);
+    if (error) throw error;
+    return data ?? [];
+  },
+});
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -44,6 +59,7 @@ export const Route = createFileRoute("/")({
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(avisosRecientesQO);
     context.queryClient.ensureQueryData(proximosEventosQO);
+    context.queryClient.ensureQueryData(proximasCapacitacionesQO);
   },
   component: Index,
   errorComponent: ({ error }) => (
@@ -53,10 +69,13 @@ export const Route = createFileRoute("/")({
   ),
 });
 
+
 const ACCESOS = [
   { to: "/avisos", icon: Megaphone, title: "Avisos", desc: "Comunicados institucionales y del Centro de Estudiantes" },
   { to: "/calendario", icon: Calendar, title: "Calendario", desc: "Exámenes, actividades y eventos" },
   { to: "/materias", icon: BookOpen, title: "Materias", desc: "Recursos por especialidad y año" },
+  { to: "/capacitaciones", icon: GraduationCap, title: "Capacitaciones", desc: "Cursos y propuestas especiales" },
+  { to: "/centro-estudiantes", icon: Users, title: "Centro de Estudiantes", desc: "Anuncios, integrantes y propuestas" },
   { to: "/galeria", icon: Camera, title: "Galería", desc: "Fotos de actividades escolares" },
   { to: "/institucional", icon: Newspaper, title: "Institucional", desc: "Información sobre la escuela" },
   { to: "/contacto", icon: Mail, title: "Contacto", desc: "Formulario y datos de contacto" },
@@ -66,6 +85,8 @@ function Index() {
   const config = useConfigSitio();
   const { data: avisos } = useSuspenseQuery(avisosRecientesQO);
   const { data: eventos } = useSuspenseQuery(proximosEventosQO);
+  const { data: capacitaciones } = useSuspenseQuery(proximasCapacitacionesQO);
+  const mascotaUrl = config("mascota_video_url");
 
   return (
     <SiteLayout>

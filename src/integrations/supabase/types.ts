@@ -50,6 +50,90 @@ export type Database = {
         }
         Relationships: []
       }
+      capacitaciones: {
+        Row: {
+          aula: string | null
+          created_at: string
+          cupo: number | null
+          descripcion: string | null
+          destacado: boolean
+          destinatarios: string | null
+          dias: string | null
+          estado: string
+          horario: string | null
+          id: string
+          nombre: string
+          orden: number
+          responsable: string | null
+          updated_at: string
+        }
+        Insert: {
+          aula?: string | null
+          created_at?: string
+          cupo?: number | null
+          descripcion?: string | null
+          destacado?: boolean
+          destinatarios?: string | null
+          dias?: string | null
+          estado?: string
+          horario?: string | null
+          id?: string
+          nombre: string
+          orden?: number
+          responsable?: string | null
+          updated_at?: string
+        }
+        Update: {
+          aula?: string | null
+          created_at?: string
+          cupo?: number | null
+          descripcion?: string | null
+          destacado?: boolean
+          destinatarios?: string | null
+          dias?: string | null
+          estado?: string
+          horario?: string | null
+          id?: string
+          nombre?: string
+          orden?: number
+          responsable?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      centro_integrantes: {
+        Row: {
+          anio: string | null
+          cargo: string
+          created_at: string
+          foto_url: string | null
+          id: string
+          nombre: string
+          orden: number
+          updated_at: string
+        }
+        Insert: {
+          anio?: string | null
+          cargo: string
+          created_at?: string
+          foto_url?: string | null
+          id?: string
+          nombre: string
+          orden?: number
+          updated_at?: string
+        }
+        Update: {
+          anio?: string | null
+          cargo?: string
+          created_at?: string
+          foto_url?: string | null
+          id?: string
+          nombre?: string
+          orden?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       config_sitio: {
         Row: {
           clave: string
@@ -74,18 +158,24 @@ export type Database = {
           descripcion: string | null
           nombre: string
           orden: number
+          salida_laboral: string | null
+          video_url: string | null
         }
         Insert: {
           codigo: Database["public"]["Enums"]["especialidad_codigo"]
           descripcion?: string | null
           nombre: string
           orden?: number
+          salida_laboral?: string | null
+          video_url?: string | null
         }
         Update: {
           codigo?: Database["public"]["Enums"]["especialidad_codigo"]
           descripcion?: string | null
           nombre?: string
           orden?: number
+          salida_laboral?: string | null
+          video_url?: string | null
         }
         Relationships: []
       }
@@ -130,6 +220,7 @@ export type Database = {
           cover_path: string | null
           created_at: string
           descripcion: string | null
+          es_centro: boolean
           fecha: string | null
           id: string
           titulo: string
@@ -139,6 +230,7 @@ export type Database = {
           cover_path?: string | null
           created_at?: string
           descripcion?: string | null
+          es_centro?: boolean
           fecha?: string | null
           id?: string
           titulo: string
@@ -148,6 +240,7 @@ export type Database = {
           cover_path?: string | null
           created_at?: string
           descripcion?: string | null
+          es_centro?: boolean
           fecha?: string | null
           id?: string
           titulo?: string
@@ -317,6 +410,84 @@ export type Database = {
           email?: string
           id?: string
           nombre_completo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      propuestas_centro: {
+        Row: {
+          created_at: string
+          curso: string | null
+          email: string | null
+          id: string
+          leido: boolean
+          mensaje: string
+          nombre: string
+        }
+        Insert: {
+          created_at?: string
+          curso?: string | null
+          email?: string | null
+          id?: string
+          leido?: boolean
+          mensaje: string
+          nombre: string
+        }
+        Update: {
+          created_at?: string
+          curso?: string | null
+          email?: string | null
+          id?: string
+          leido?: boolean
+          mensaje?: string
+          nombre?: string
+        }
+        Relationships: []
+      }
+      proyectos: {
+        Row: {
+          anio: number | null
+          autores: string | null
+          created_at: string
+          created_by: string | null
+          descripcion: string
+          destacado: boolean
+          especialidad: string
+          fecha: string | null
+          foto_url: string | null
+          id: string
+          orden: number
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          anio?: number | null
+          autores?: string | null
+          created_at?: string
+          created_by?: string | null
+          descripcion: string
+          destacado?: boolean
+          especialidad: string
+          fecha?: string | null
+          foto_url?: string | null
+          id?: string
+          orden?: number
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          anio?: number | null
+          autores?: string | null
+          created_at?: string
+          created_by?: string | null
+          descripcion?: string
+          destacado?: boolean
+          especialidad?: string
+          fecha?: string | null
+          foto_url?: string | null
+          id?: string
+          orden?: number
+          titulo?: string
           updated_at?: string
         }
         Relationships: []
