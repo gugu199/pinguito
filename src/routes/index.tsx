@@ -197,7 +197,7 @@ function Index() {
                 {c.descripcion && <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{c.descripcion}</p>}
                 <dl className="mt-3 grid grid-cols-1 gap-1 text-xs text-muted-foreground">
                   {c.aula && <div><dt className="inline font-medium text-foreground">Aula: </dt><dd className="inline">{c.aula}</dd></div>}
-                  {c.dias_horarios && <div><dt className="inline font-medium text-foreground">Horario: </dt><dd className="inline">{c.dias_horarios}</dd></div>}
+                  {(c.dias || c.horario) && <div><dt className="inline font-medium text-foreground">Horario: </dt><dd className="inline">{[c.dias, c.horario].filter(Boolean).join(" · ")}</dd></div>}
                   {c.responsable && <div><dt className="inline font-medium text-foreground">A cargo: </dt><dd className="inline">{c.responsable}</dd></div>}
                 </dl>
               </article>
