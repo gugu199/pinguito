@@ -169,6 +169,41 @@ function Index() {
           </aside>
         </div>
 
+        {/* Mascota */}
+        {mascotaUrl && (
+          <section className="mt-12 grid gap-6 rounded-md border border-border bg-card p-6 md:grid-cols-2 md:items-center">
+            <div>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">{config("mascota_titulo")}</p>
+              <h2 className="mt-2 font-serif text-2xl font-semibold">{config("mascota_titulo")}</h2>
+              <p className="mt-3 text-muted-foreground">{config("mascota_descripcion")}</p>
+            </div>
+            <VideoEmbed url={mascotaUrl} title={config("mascota_titulo")} />
+          </section>
+        )}
+
+        {/* Capacitaciones destacadas */}
+        <section className="mt-12">
+          <div className="flex items-end justify-between">
+            <h2 className="font-serif text-2xl font-semibold">Capacitaciones especiales</h2>
+            <Link to="/capacitaciones" className="text-sm font-medium text-primary hover:underline">Ver todas →</Link>
+          </div>
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            {capacitaciones.length === 0 ? (
+              <p className="text-muted-foreground">Próximamente publicaremos nuevas capacitaciones.</p>
+            ) : capacitaciones.map((c) => (
+              <article key={c.id} className="rounded-md border border-border bg-card p-5">
+                <h3 className="font-serif text-lg font-semibold">{c.nombre}</h3>
+                {c.descripcion && <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{c.descripcion}</p>}
+                <dl className="mt-3 grid grid-cols-1 gap-1 text-xs text-muted-foreground">
+                  {c.aula && <div><dt className="inline font-medium text-foreground">Aula: </dt><dd className="inline">{c.aula}</dd></div>}
+                  {c.dias_horarios && <div><dt className="inline font-medium text-foreground">Horario: </dt><dd className="inline">{c.dias_horarios}</dd></div>}
+                  {c.responsable && <div><dt className="inline font-medium text-foreground">A cargo: </dt><dd className="inline">{c.responsable}</dd></div>}
+                </dl>
+              </article>
+            ))}
+          </div>
+        </section>
+
         {/* Accesos directos */}
         <section className="mt-12">
           <h2 className="font-serif text-2xl font-semibold">Accesos directos</h2>
