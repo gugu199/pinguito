@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
-import { Calendar, Megaphone, BookOpen, Mail, Camera, Newspaper } from "lucide-react";
+import { Calendar, Megaphone, BookOpen, Mail, Camera, Newspaper, GraduationCap, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout, Container } from "@/components/site/SiteLayout";
 import { AvisoCard } from "@/components/site/AvisoCard";
+import { VideoEmbed } from "@/components/site/VideoEmbed";
 import { useConfigSitio } from "@/hooks/use-config-sitio";
 
 const avisosRecientesQO = queryOptions({
@@ -34,6 +35,21 @@ const proximosEventosQO = queryOptions({
   },
 });
 
+const proximasCapacitacionesQO = queryOptions({
+  queryKey: ["capacitaciones", "proximas"],
+  queryFn: async () => {
+    const { data, error } = await supabase
+      .from("capacitaciones")
+      .select("id, nombre, descripcion, aula, dias, horario, responsable, estado, destacado")
+      .in("estado", ["abierta", "en_curso"])
+      .order("destacado", { ascending: false })
+      .order("orden", { ascending: true })
+      .limit(3);
+    if (error) throw error;
+    return data ?? [];
+  },
+});
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -44,6 +60,7 @@ export const Route = createFileRoute("/")({
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(avisosRecientesQO);
     context.queryClient.ensureQueryData(proximosEventosQO);
+    context.queryClient.ensureQueryData(proximasCapacitacionesQO);
   },
   component: Index,
   errorComponent: ({ error }) => (
@@ -53,10 +70,13 @@ export const Route = createFileRoute("/")({
   ),
 });
 
+
 const ACCESOS = [
   { to: "/avisos", icon: Megaphone, title: "Avisos", desc: "Comunicados institucionales y del Centro de Estudiantes" },
   { to: "/calendario", icon: Calendar, title: "Calendario", desc: "Exámenes, actividades y eventos" },
   { to: "/materias", icon: BookOpen, title: "Materias", desc: "Recursos por especialidad y año" },
+  { to: "/capacitaciones", icon: GraduationCap, title: "Capacitaciones", desc: "Cursos y propuestas especiales" },
+  { to: "/centro-estudiantes", icon: Users, title: "Centro de Estudiantes", desc: "Anuncios, integrantes y propuestas" },
   { to: "/galeria", icon: Camera, title: "Galería", desc: "Fotos de actividades escolares" },
   { to: "/institucional", icon: Newspaper, title: "Institucional", desc: "Información sobre la escuela" },
   { to: "/contacto", icon: Mail, title: "Contacto", desc: "Formulario y datos de contacto" },
@@ -66,6 +86,8 @@ function Index() {
   const config = useConfigSitio();
   const { data: avisos } = useSuspenseQuery(avisosRecientesQO);
   const { data: eventos } = useSuspenseQuery(proximosEventosQO);
+  const { data: capacitaciones } = useSuspenseQuery(proximasCapacitacionesQO);
+  const mascotaUrl = config("mascota_video_url");
 
   return (
     <SiteLayout>
@@ -147,6 +169,41 @@ function Index() {
             </Link>
           </aside>
         </div>
+
+        {/* Mascota */}
+        {mascotaUrl && (
+          <section className="mt-12 grid gap-6 rounded-md border border-border bg-card p-6 md:grid-cols-2 md:items-center">
+            <div>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">{config("mascota_titulo")}</p>
+              <h2 className="mt-2 font-serif text-2xl font-semibold">{config("mascota_titulo")}</h2>
+              <p className="mt-3 text-muted-foreground">{config("mascota_descripcion")}</p>
+            </div>
+            <VideoEmbed url={mascotaUrl} title={config("mascota_titulo")} />
+          </section>
+        )}
+
+        {/* Capacitaciones destacadas */}
+        <section className="mt-12">
+          <div className="flex items-end justify-between">
+            <h2 className="font-serif text-2xl font-semibold">Capacitaciones especiales</h2>
+            <Link to="/capacitaciones" className="text-sm font-medium text-primary hover:underline">Ver todas →</Link>
+          </div>
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            {capacitaciones.length === 0 ? (
+              <p className="text-muted-foreground">Próximamente publicaremos nuevas capacitaciones.</p>
+            ) : capacitaciones.map((c) => (
+              <article key={c.id} className="rounded-md border border-border bg-card p-5">
+                <h3 className="font-serif text-lg font-semibold">{c.nombre}</h3>
+                {c.descripcion && <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{c.descripcion}</p>}
+                <dl className="mt-3 grid grid-cols-1 gap-1 text-xs text-muted-foreground">
+                  {c.aula && <div><dt className="inline font-medium text-foreground">Aula: </dt><dd className="inline">{c.aula}</dd></div>}
+                  {(c.dias || c.horario) && <div><dt className="inline font-medium text-foreground">Horario: </dt><dd className="inline">{[c.dias, c.horario].filter(Boolean).join(" · ")}</dd></div>}
+                  {c.responsable && <div><dt className="inline font-medium text-foreground">A cargo: </dt><dd className="inline">{c.responsable}</dd></div>}
+                </dl>
+              </article>
+            ))}
+          </div>
+        </section>
 
         {/* Accesos directos */}
         <section className="mt-12">

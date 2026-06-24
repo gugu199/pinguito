@@ -1,9 +1,10 @@
 import { Link, Outlet, useLocation, useNavigate, createFileRoute } from "@tanstack/react-router";
-import { LayoutDashboard, Megaphone, Calendar, BookOpen, Camera, Mail, KeyRound, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Megaphone, Calendar, BookOpen, Camera, Mail, KeyRound, Settings, LogOut, FolderKanban, Users, GraduationCap, Inbox, Layers } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, useRoles, canManageUsers, canEditCalendario, canEditMaterias } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/site/ThemeToggle";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminLayout,
@@ -15,15 +16,23 @@ function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const isAutoridad = roles.includes("autoridad");
+  const isCentro = roles.includes("centro_estudiantes");
+
   const items: Array<{ to: string; label: string; icon: typeof LayoutDashboard; show: boolean; exact?: boolean }> = [
     { to: "/admin", label: "Resumen", icon: LayoutDashboard, show: true, exact: true },
     { to: "/admin/avisos", label: "Avisos", icon: Megaphone, show: true },
     { to: "/admin/calendario", label: "Calendario", icon: Calendar, show: canEditCalendario(roles) },
+    { to: "/admin/especialidades", label: "Especialidades", icon: Layers, show: isAutoridad || roles.includes("informatica") },
     { to: "/admin/materias", label: "Materias y recursos", icon: BookOpen, show: canEditMaterias(roles) },
+    { to: "/admin/proyectos", label: "Proyectos de alumnos", icon: FolderKanban, show: canEditMaterias(roles) },
+    { to: "/admin/capacitaciones", label: "Capacitaciones", icon: GraduationCap, show: canEditCalendario(roles) },
+    { to: "/admin/centro", label: "Centro de Estudiantes", icon: Users, show: isAutoridad || isCentro },
+    { to: "/admin/propuestas", label: "Propuestas al Centro", icon: Inbox, show: isAutoridad || isCentro },
     { to: "/admin/galeria", label: "Galería", icon: Camera, show: canEditMaterias(roles) },
     { to: "/admin/mensajes", label: "Mensajes", icon: Mail, show: canManageUsers(roles) },
     { to: "/admin/invitaciones", label: "Invitaciones", icon: KeyRound, show: canManageUsers(roles) },
-    { to: "/admin/config", label: "Datos institucionales", icon: Settings, show: roles.includes("autoridad") || roles.includes("informatica") },
+    { to: "/admin/config", label: "Datos institucionales", icon: Settings, show: isAutoridad || roles.includes("informatica") },
   ];
 
   async function logout() {
@@ -44,6 +53,7 @@ function AdminLayout() {
                 {roles.join(", ")}
               </span>
             )}
+            <ThemeToggle className="border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-dark" />
             <Button variant="outline" size="sm" onClick={logout} className="border-primary-foreground/40 text-primary-foreground hover:bg-primary-dark">
               <LogOut className="mr-1.5 h-4 w-4" /> Salir
             </Button>

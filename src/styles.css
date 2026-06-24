@@ -10,7 +10,7 @@
 @import "@fontsource/inter/600.css";
 @import "@fontsource/inter/700.css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 /*
  * Sistema de diseño institucional:
@@ -130,7 +130,53 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-  }
+}
+
+.dark {
+  --background: oklch(0.18 0.025 260);
+  --foreground: oklch(0.96 0.01 250);
+
+  --card: oklch(0.22 0.03 260);
+  --card-foreground: oklch(0.96 0.01 250);
+
+  --popover: oklch(0.22 0.03 260);
+  --popover-foreground: oklch(0.96 0.01 250);
+
+  --primary: oklch(0.72 0.14 250);
+  --primary-foreground: oklch(0.16 0.03 260);
+  --primary-dark: oklch(0.62 0.14 250);
+
+  --secondary: oklch(0.28 0.03 260);
+  --secondary-foreground: oklch(0.94 0.01 250);
+
+  --muted: oklch(0.26 0.025 260);
+  --muted-foreground: oklch(0.7 0.02 255);
+
+  --accent: oklch(0.32 0.05 258);
+  --accent-foreground: oklch(0.96 0.01 250);
+
+  --destructive: oklch(0.62 0.22 27);
+  --destructive-foreground: oklch(0.99 0.003 250);
+
+  --border: oklch(0.32 0.025 260);
+  --input: oklch(0.32 0.025 260);
+  --ring: oklch(0.72 0.14 250);
+
+  --cdec: oklch(0.65 0.14 30);
+  --cdec-foreground: oklch(0.14 0.02 30);
+
+  --familias: oklch(0.7 0.07 245);
+  --familias-foreground: oklch(0.14 0.02 245);
+
+  --sidebar: oklch(0.2 0.025 260);
+  --sidebar-foreground: oklch(0.96 0.01 250);
+  --sidebar-primary: oklch(0.72 0.14 250);
+  --sidebar-primary-foreground: oklch(0.16 0.03 260);
+  --sidebar-accent: oklch(0.28 0.04 258);
+  --sidebar-accent-foreground: oklch(0.96 0.01 250);
+  --sidebar-border: oklch(0.32 0.025 260);
+  --sidebar-ring: oklch(0.72 0.14 250);
+}
 
   h1, h2, h3, h4 {
     font-family: var(--font-serif);

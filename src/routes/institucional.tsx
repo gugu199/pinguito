@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout, PageHeader, Container } from "@/components/site/SiteLayout";
 import { useConfigSitio } from "@/hooks/use-config-sitio";
+import { SchoolMap } from "@/components/site/SchoolMap";
 
 export const Route = createFileRoute("/institucional")({
   head: () => ({
@@ -48,6 +49,19 @@ function InstitucionalPage() {
               <li><strong className="text-foreground">Email:</strong> {config("email")}</li>
               <li><strong className="text-foreground">Horario:</strong> {config("horario")}</li>
             </ul>
+          </section>
+
+          <section className="mt-8 not-prose">
+            <h2 className="font-serif text-2xl font-semibold">Cómo llegar</h2>
+            <p className="mt-2 text-sm text-muted-foreground">Ubicación de la escuela en Google Maps.</p>
+            <div className="mt-4">
+              <SchoolMap
+                direccion={config("direccion")}
+                lat={config("mapa_lat")}
+                lng={config("mapa_lng")}
+                zoom={config("mapa_zoom")}
+              />
+            </div>
           </section>
         </article>
       </Container>

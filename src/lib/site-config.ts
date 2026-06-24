@@ -6,6 +6,13 @@ export const SITE_DEFAULTS = {
   telefono: "+54 11 0000-0000",
   email: "contacto@escuela.edu.ar",
   horario: "Lunes a viernes de 7:30 a 17:30",
+  mascota_titulo: "Nuestra mascota",
+  mascota_descripcion: "Conocé a la mascota de la escuela.",
+  mascota_video_url: "",
+  centro_presentacion: "El Centro de Estudiantes representa a las y los alumnos de la escuela.",
+  mapa_lat: "",
+  mapa_lng: "",
+  mapa_zoom: "16",
 } as const;
 
 export type SiteConfigKey = keyof typeof SITE_DEFAULTS;
@@ -34,4 +41,10 @@ export const EVENTO_TIPOS = [
   { value: "examen", label: "Examen" },
   { value: "actividad", label: "Actividad" },
   { value: "evento", label: "Evento" },
+] as const;
+
+export const CAPACITACION_ESTADOS = [
+  { value: "abierta", label: "Inscripción abierta" },
+  { value: "en_curso", label: "En curso" },
+  { value: "cerrada", label: "Cerrada" },
 ] as const;

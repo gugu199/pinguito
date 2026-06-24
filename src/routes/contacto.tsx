@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Mail, MapPin, Phone, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout, PageHeader, Container } from "@/components/site/SiteLayout";
+import { SchoolMap } from "@/components/site/SchoolMap";
 import { useConfigSitio } from "@/hooks/use-config-sitio";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -69,6 +70,14 @@ function ContactoPage() {
               <li className="flex gap-3"><Mail className="mt-0.5 h-4 w-4 text-primary" aria-hidden /><span>{config("email")}</span></li>
               <li className="flex gap-3"><Clock className="mt-0.5 h-4 w-4 text-primary" aria-hidden /><span>{config("horario")}</span></li>
             </ul>
+            <div className="mt-4">
+              <SchoolMap
+                direccion={config("direccion")}
+                lat={config("mapa_lat")}
+                lng={config("mapa_lng")}
+                zoom={config("mapa_zoom")}
+              />
+            </div>
           </aside>
           <form onSubmit={onSubmit} className="lg:col-span-2 space-y-4 rounded-md border border-border bg-card p-6">
             <div className="grid gap-4 sm:grid-cols-2">
