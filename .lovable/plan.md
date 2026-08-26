@@ -1,108 +1,64 @@
-# Plan: extensiones v2 del sitio escolar
+# Plan: sitio funcional + guía para migrar en el futuro
 
-Sumamos contenido editable por especialidad, proyectos de alumnos, sección propia del Centro de Estudiantes, capacitaciones especiales, video de la mascota, mapa de Google y tema claro/oscuro. Todo gestionable desde el panel `/admin`.
+## Estado actual
 
-## 1. Tema claro / oscuro
-- Variante `dark` con `@custom-variant dark (&:where(.dark, .dark *));` en `src/styles.css`.
-- Bloque `:root` (claro institucional) + `.dark` (azul nocturno, contraste AA).
-- Hook `useTheme` que persiste en `localStorage` y aplica `class="dark"` en `<html>`.
-- Botón sol/luna en `SiteHeader` y `AdminHeader`.
-- Sin detección automática de sistema (lo descartaste); arranca en claro.
+El sitio ya está construido sobre TanStack Start y tiene:
 
-## 2. Páginas de especialidades enriquecidas
-Reemplazamos `materias.$especialidad.tsx` por una página con:
-- **Encabezado** con nombre + descripción (ya existe).
-- **Video introductorio**: campo `video_url` (YouTube/Vimeo) editable por especialidad. Embed responsive.
-- **Salida laboral / perfil del egresado**: campo `salida_laboral` (texto largo, markdown ligero).
-- **Listado de materias por año** (lo que ya hay).
-- **Proyectos de alumnos** de esa especialidad (ver §4).
+- Frontend público: inicio, institucional, avisos, calendario, galería, materias por especialidad, centro de estudiantes, capacitaciones, contacto.
+- Panel de administración (`/_authenticated/admin/*`) para editar casi todo: datos de la escuela, mapa, video de la mascota, especialidades, proyectos, capacitaciones, avisos, calendario, galería, centro de estudiantes, invitaciones y propuestas.
+- Base de datos con roles (`autoridad`, `docente`, `centro_estudiantes`, `informatica`), sistema de invitaciones y RLS endurecido.
+- Tema claro/oscuro y diseño responsive.
 
-Mismo formato para una nueva especialidad virtual `ciclo_basico` (1º a 3º).
+## Lo que falta para que sea 100 % funcional
 
-Editable desde `Admin → Especialidades` (nuevo).
+1. **Contenido de ejemplo**
+   - Rellenar la base de datos con datos ficticios de demostración (avisos, eventos, materias, capacitaciones, galería, proyectos, integrantes del centro, config del sitio).
+   - Esto permite ver el sitio completo sin depender de que el usuario cargue nada a mano.
 
-## 3. Centro de Estudiantes — sección propia
-Ruta pública `/centro-estudiantes` con:
-- Presentación (texto editable: misión, gestión actual).
-- **Integrantes**: foto, nombre, cargo, año — tabla `centro_integrantes`.
-- **Anuncios del centro**: ya existe categoría `centro_estudiantes` en `avisos`, los listamos acá filtrados.
-- **Galería de actividades**: reutiliza álbumes de `galeria_albumes` con flag `es_centro`.
-- **Formulario "Enviá tu propuesta"**: tabla `propuestas_centro` (nombre, año/curso opcional, email opcional, mensaje). Solo el rol `centro_estudiantes` y `autoridad` las leen desde `Admin → Propuestas`.
+2. **Autenticación social (Google OAuth)**
+   - Configurar el proveedor de Google en Lovable Cloud / auth.
+   - Agregar botón "Ingresar con Google" en `/auth`.
+   - El primer usuario que se registre sigue siendo `autoridad` automáticamente; los siguientes necesitan código de invitación para obtener un rol.
 
-Editable desde `Admin → Centro de Estudiantes` (visible para roles `centro_estudiantes` y `autoridad`).
+3. **Verificación de acceso y roles**
+   - Asegurar que solo `autoridad` pueda gestionar invitaciones.
+   - Asegurar que `docente` vea solo materias, `centro_estudiantes` vea solo centro/propuestas, `informatica` vea solo ciertas secciones según corresponda.
+   - Revisar que el login con email/contraseña y el canje de códigos funcionen sin errores.
 
-## 4. Proyectos de alumnos
-Nueva tabla `proyectos` con: título, descripción, especialidad, año cursado, autores (texto libre), foto principal (Storage bucket `proyectos`, público), fecha, destacado (bool).
-- Se muestran en cada página de especialidad como grilla de cards.
-- Carrusel/grilla de "Últimos proyectos" opcional en home (no lo pediste explícitamente, lo dejamos solo en especialidades).
-- Admin: `Admin → Proyectos` con CRUD + upload de imagen. Permitido para `autoridad`, `docente`, `informatica`.
+4. **Build limpio y publicación**
+   - Correr build de producción para confirmar que no hay errores.
+   - Publicar el sitio para que sea accesible en la URL publicada.
 
-## 5. Capacitaciones especiales
-Nueva tabla `capacitaciones`: nombre, descripción, aula, días, horario, responsable, cupo, estado (`abierta`/`cerrada`/`en_curso`), destino (texto, ej. "abierto a la comunidad").
-- Ruta pública `/capacitaciones` con cards filtrables por estado.
-- Card destacada en home con las 3 próximas/abiertas.
-- Admin: `Admin → Capacitaciones`. Permitido para `autoridad`, `docente`.
+5. **Documentación rápida para el usuario**
+   - Explicarle qué se edita desde el panel de admin y qué desde dónde.
+   - Dejar un mini-checklist de "reemplazar por datos reales".
 
-## 6. Video de la mascota en home
-- Nuevas claves en `config_sitio`: `mascota_titulo`, `mascota_descripcion`, `mascota_video_url`.
-- Sección destacada en `routes/index.tsx` con embed responsive (YouTube/Vimeo). Si no hay URL, no se muestra.
-- Editable desde `Admin → Datos institucionales`.
+## Cómo modificar los datos reales después
 
-## 7. Mapa de Google integrado
-- Conector **Google Maps Platform** de Lovable (te lo voy a pedir en el momento de enchufarlo).
-- Componente `<SchoolMap />` con marcador en la dirección de la escuela usando la JS API + browser key del conector.
-- Embebido en `/contacto` y `/institucional`.
-- Coordenadas guardadas en `config_sitio` (`lat`, `lng`, `zoom`) — editables desde admin; si la cuenta de Google Maps no está conectada todavía, mostramos un fallback con dirección + link a Google Maps.
+- **Datos de la escuela, mapa y video de la mascota**: `Panel de admin → Datos institucionales`.
+- **Especialidades y videos introductorios**: `Panel de admin → Especialidades`.
+- **Proyectos de alumnos**: `Panel de admin → Proyectos` (sube fotos y descripción).
+- **Capacitaciones especiales**: `Panel de admin → Capacitaciones`.
+- **Avisos / Calendario / Galería**: módulos correspondientes en el admin.
+- **Centro de Estudiantes**: `Panel de admin → Centro de Estudiantes` y `Propuestas`.
+- **Usuarios y roles**: `Panel de admin → Invitaciones` (genera códigos) y el usuario los canjea en `/auth`.
 
-## 8. Mejoras generales sugeridas (incluidas)
-- **Breadcrumbs** en rutas anidadas (especialidades, materias, proyectos).
-- **Open Graph** por ruta con título/descripción específicos para compartir en WhatsApp/redes.
-- **Sitemap.xml + robots.txt** generados en build.
-- **Skeletons** en listados largos en vez de "Cargando…".
-- **Notificación visible en admin** cuando hay mensajes/propuestas sin leer (badge en sidebar).
-- **Orden manual** (drag-handle o campo `orden`) en proyectos y capacitaciones destacados.
+## Preparación para migrar a otro hosting en el futuro
 
-## Detalles técnicos
+Para no quedar atado a Lovable Cloud ni sufrir errores al migrar:
 
-### Migración SQL (una sola)
-- `proyectos` (+ bucket público `proyectos`).
-- `capacitaciones`.
-- `centro_integrantes`.
-- `propuestas_centro`.
-- ALTER `especialidades` ADD `video_url text`, `salida_laboral text`.
-- ALTER `galeria_albumes` ADD `es_centro boolean default false`.
-- INSERT `especialidades` row `ciclo_basico` si no existe.
-- INSERT claves `mascota_*`, `lat`, `lng`, `zoom`, `centro_presentacion` en `config_sitio` (con `null`).
-- GRANTs: `SELECT TO anon` para tablas públicas (`proyectos`, `capacitaciones`, `centro_integrantes`); `INSERT TO anon` solo en `propuestas_centro` (con rate-limit por trigger simple); resto vía roles.
-- RLS:
-  - `proyectos`/`capacitaciones`: lectura pública; escritura `has_role autoridad|docente|informatica`.
-  - `centro_integrantes`: lectura pública; escritura `has_role autoridad|centro_estudiantes`.
-  - `propuestas_centro`: insert público; lectura solo `autoridad|centro_estudiantes`.
+- **Base de datos**: todo el esquema y las políticas están en `supabase/migrations/*.sql`. Al migrar, ejecutar esos archivos en orden en la nueva base Postgres (con pgcrypto y pgjwt si se usa Supabase).
+- **Storage / imágenes**: descargar el contenido de los buckets (`galeria`, `recursos`, `proyectos`) y re-subirlos al nuevo storage, o implementar un backup periódico.
+- **Auth**: los usuarios están en `auth.users` de Supabase. Al cambiar de proveedor hay que re-crear cuentas o exportar/importar IDs; los perfiles y roles están en tablas `public` y pueden migrarse fácilmente.
+- **Variables de entorno**: el proyecto usa `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` y `VITE_SUPABASE_PROJECT_ID`. Al migrar se reemplazan por las del nuevo backend.
+- **Código fuente**: no hay lógica dependiente de edge functions ni de Lovable-only APIs; todo el backend app-interno usa `createServerFn` y TanStack Start, por lo que corre en cualquier host Node/Edge compatible con Vite 7+ y Nitro.
+- **Lockfile y dependencias**: conservar `bun.lockb` (o generar `package-lock.json`) y documentar la versión exacta de Node/Bun para reproducir el build.
+- **Recomendación general**: evitar migrar en medio de una actualización de framework; primero estabilizar una versión, publicar, y luego planificar la migración copiando DB + storage + env.
 
-### Frontend
-- Tokens `dark` en `src/styles.css`.
-- Nuevos componentes: `ThemeToggle`, `VideoEmbed`, `ProyectoCard`, `CapacitacionCard`, `IntegranteCard`, `SchoolMap`, `MascotaSection`.
-- Nuevas rutas públicas: `centro-estudiantes.tsx`, `capacitaciones.tsx`.
-- Nuevas rutas admin: `admin.especialidades.tsx`, `admin.proyectos.tsx`, `admin.capacitaciones.tsx`, `admin.centro.tsx` (integrantes + presentación), `admin.propuestas.tsx`.
-- Sidebar admin actualizado con visibilidad por rol.
-- Home (`routes/index.tsx`): nueva sección mascota + próximas capacitaciones + últimos avisos.
+## Entregables de este plan
 
-### Google Maps
-- Cuando vayamos a esa fase pedimos conectar el conector `google_maps` desde la UI de Lovable. Mientras no esté, `<SchoolMap />` muestra dirección + botón "Abrir en Google Maps".
-
-## Lo que necesito de vos cuando empecemos a buildear
-- URL del video de la mascota (YouTube/Vimeo) o lo cargás luego desde admin.
-- Dirección exacta de la escuela (para coordenadas iniciales del mapa).
-- Conectar Google Maps Platform desde el botón cuando te lo pida.
-- Foto/integrantes iniciales del Centro si querés que arranque con datos; si no, queda vacío y los carga el centro desde admin.
-
-## Orden de implementación
-1. Migración SQL (tablas, columnas, grants, RLS, bucket).
-2. Tokens dark + `ThemeToggle`.
-3. Especialidades enriquecidas + admin de especialidades + ciclo básico.
-4. Proyectos (pública + admin).
-5. Capacitaciones (pública + admin) + destacadas en home.
-6. Centro de Estudiantes (página pública + admin + propuestas).
-7. Mascota en home + claves en config.
-8. Mapa de Google (conector + componente + fallback).
-9. Pulido: breadcrumbs, OG por ruta, sitemap, badges de pendientes.
+1. Migración de seed con contenido de ejemplo aplicada a la base de datos.
+2. Botón de "Ingresar con Google" en `/auth` y proveedor configurado.
+3. Revisión de accesos por rol en el panel de admin.
+4. Build limpio y sitio publicado.
+5. Mini-guía para el usuario sobre dónde editar cada cosa.
