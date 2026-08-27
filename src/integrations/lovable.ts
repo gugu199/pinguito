@@ -55,7 +55,7 @@ async function signInWithOAuthPreview(provider: string, redirect_uri: string) {
 
 export const lovable = {
   auth: {
-    async signInWithOAuth(provider: "google" | "apple" | "microsoft", { redirect_uri }: { redirect_uri: string }) {
+    async signInWithOAuth(provider: "google" | "apple", { redirect_uri }: { redirect_uri: string }) {
       if (isPreviewSurface() && window.parent && window.parent !== window) {
         await signInWithOAuthPreview(provider, redirect_uri);
         return;
