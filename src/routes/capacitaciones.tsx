@@ -18,7 +18,14 @@ const capacitacionesQO = queryOptions({
 });
 
 export const Route = createFileRoute("/capacitaciones")({
-  head: () => ({ meta: [{ title: "Capacitaciones especiales · Escuela" }] }),
+  head: () => ({ meta: [
+    { title: "Capacitaciones especiales · Escuela Secundaria Técnica" },
+    { name: "description", content: "Cursos y talleres extracurriculares: aula, días, horarios, responsable y cupos disponibles." },
+    { property: "og:title", content: "Capacitaciones especiales · Escuela Secundaria Técnica" },
+    { property: "og:description", content: "Cursos y talleres extracurriculares: aula, días, horarios, responsable y cupos disponibles." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(capacitacionesQO),
   component: Page,
 });

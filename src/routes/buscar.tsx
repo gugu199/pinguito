@@ -12,7 +12,14 @@ const searchSchema = z.object({ q: z.string().optional().default("") });
 
 export const Route = createFileRoute("/buscar")({
   validateSearch: searchSchema,
-  head: () => ({ meta: [{ title: "Buscar · Escuela Secundaria Técnica" }] }),
+  head: () => ({ meta: [
+    { title: "Buscar · Escuela Secundaria Técnica" },
+    { name: "description", content: "Buscá avisos, materias, recursos y eventos publicados en el sitio de la escuela." },
+    { property: "og:title", content: "Buscar · Escuela Secundaria Técnica" },
+    { property: "og:description", content: "Buscá avisos, materias, recursos y eventos publicados en el sitio de la escuela." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: BuscarPage,
 });
 
