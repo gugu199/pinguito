@@ -37,9 +37,27 @@ export const Route = createFileRoute("/materias/$especialidad")({
     const data = await context.queryClient.ensureQueryData(especialidadQO(params.especialidad));
     if (!data) throw notFound();
   },
-  head: ({ params }) => ({
-    meta: [{ title: `${params.especialidad.replace("_", " ")} · Materias` }],
-  }),
+  head: ({ params }) => {
+    const nombres: Record<string, string> = {
+      ciclo_basico: "Ciclo Básico",
+      informatica: "Informática",
+      alimentos: "Alimentos",
+      electronica: "Electrónica",
+    };
+    const nombre = nombres[params.especialidad] ?? params.especialidad.replace("_", " ");
+    const title = `${nombre} · Materias y proyectos`;
+    const description = `Plan de materias, recursos, video introductorio y proyectos de alumnos de la especialidad ${nombre} de la escuela técnica.`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
   component: EspecialidadPage,
   notFoundComponent: () => (
     <SiteLayout><Container><p>Especialidad no encontrada.</p></Container></SiteLayout>

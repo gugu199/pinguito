@@ -21,7 +21,14 @@ const GoogleIcon = () => (
 
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({ meta: [{ title: "Ingresar · Escuela Secundaria Técnica" }] }),
+  head: () => ({ meta: [
+    { title: "Ingresar · Escuela Secundaria Técnica" },
+    { name: "description", content: "Acceso al panel de administración para autoridades, docentes y Centro de Estudiantes." },
+    { property: "og:title", content: "Ingresar · Escuela Secundaria Técnica" },
+    { property: "og:description", content: "Acceso al panel de administración para autoridades, docentes y Centro de Estudiantes." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   beforeLoad: async () => {
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();

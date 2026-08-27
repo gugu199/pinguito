@@ -35,7 +35,14 @@ const ceQO = queryOptions({
 });
 
 export const Route = createFileRoute("/centro-estudiantes")({
-  head: () => ({ meta: [{ title: "Centro de Estudiantes · Escuela" }] }),
+  head: () => ({ meta: [
+    { title: "Centro de Estudiantes · Escuela Secundaria Técnica" },
+    { name: "description", content: "Anuncios, integrantes, actividades y formulario de propuestas del Centro de Estudiantes." },
+    { property: "og:title", content: "Centro de Estudiantes · Escuela Secundaria Técnica" },
+    { property: "og:description", content: "Anuncios, integrantes, actividades y formulario de propuestas del Centro de Estudiantes." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(ceQO),
   component: Page,
 });

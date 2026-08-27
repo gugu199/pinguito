@@ -31,6 +31,20 @@ export const Route = createFileRoute("/materias/$especialidad/$materiaId")({
     const data = await context.queryClient.ensureQueryData(materiaQO(params.materiaId));
     if (!data) throw notFound();
   },
+  head: () => {
+    const title = "Materia y recursos · Escuela Secundaria Técnica";
+    const description = "Apuntes, guías, videos y bibliografía de la materia publicados por los docentes de la escuela.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
   component: MateriaPage,
   notFoundComponent: () => <SiteLayout><Container><p>Materia no encontrada.</p></Container></SiteLayout>,
   errorComponent: ({ error }) => <SiteLayout><Container><p role="alert">{error.message}</p></Container></SiteLayout>,
